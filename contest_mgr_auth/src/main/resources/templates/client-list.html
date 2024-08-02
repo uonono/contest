@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registered Clients</title>
+    <script>
+        function fetchClients() {
+            fetch('/clients/list')
+                .then(response => response.json())
+                .then(data => {
+                    const clientList = document.getElementById('clientList');
+                    clientList.innerHTML = '';
+                    data.forEach(client => {
+                        const li = document.createElement('li');
+                        li.textContent = `Client ID: ${client.clientId}, Scopes: ${client.scopes.join(', ')}`;
+                        clientList.appendChild(li);
+                    });
+                });
+        }
+
+        setInterval(fetchClients, 5000); // 每5秒刷新一次
+        window.onload = fetchClients; // 页面加载时立即刷新一次
+    </script>
+</head>
+<body>
+<h1>Registered Clients</h1>
+<ul id="clientList"></ul>
+</body>
+</html>

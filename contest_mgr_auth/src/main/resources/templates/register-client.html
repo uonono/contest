@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register New Client</title>
+</head>
+<body>
+<h1>Register New Client</h1>
+<form th:action="@{/clients/register}" method="post">
+    <div>
+        <label for="clientId">Client ID:</label>
+        <input type="text" id="clientId" name="clientId" required>
+    </div>
+    <div>
+        <label for="clientSecret">Client Secret:</label>
+        <input type="text" id="clientSecret" name="clientSecret" required>
+    </div>
+    <div>
+        <button type="submit">Register</button>
+    </div>
+    <div th:if="${param.success}">
+        <p>Client registered successfully!</p>
+    </div>
+</form>
+</body>
+</html>

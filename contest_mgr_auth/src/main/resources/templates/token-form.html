@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Token Client ID</title>
+</head>
+<body>
+<h1>Token Client ID</h1>
+<form th:action="@{/token}" method="post">
+    <div>
+        <label for="token">Token:</label>
+        <input type="text" id="token" name="token" required>
+    </div>
+    <div>
+        <button type="submit">Get Client ID</button>
+    </div>
+</form>
+<div th:if="${clientId}">
+    <h2>Client ID: <span th:text="${clientId}"></span></h2>
+</div>
+</body>
+</html>
