@@ -55,6 +55,12 @@ public class CustomUserDetailsService implements UserDetailsManager {
         return this.users.containsKey(username);
     }
 
+    /**
+     * 这个方法是用于返回对应的用户的，我这里设置的是无论谁都可以登录，进行放行获得token
+     * @param username 用户在页面或者basic中输入的用户名（密码）
+     * @return 验证成功的用户（后期要通过数据库中查用户才能返回），本身这个用户是经过spring默认的内存存储的，但是我这里直接返回，不做this.createUser()的操作
+     * @throws UsernameNotFoundException 对应的异常，这里不可能出现，因为已经注释了
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //region 这里是直接创建用户的
