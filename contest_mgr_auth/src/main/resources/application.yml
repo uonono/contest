@@ -52,3 +52,11 @@ jwt:
   private.key: classpath:app.key
   public.key: classpath:app.pub
 
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/

@@ -125,6 +125,7 @@ public class RestConfig {
 	@Bean
 	public JwtAuthenticationConverter customJwtAuthenticationConverter() {
 		JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+		//原来那个自定义就是JwtAuthenticationConverter里面的方法 用Converter<Jwt, AbstractAuthenticationToken>反而没有，这样的话，不知道它到底在final个什么劲
 		converter.setJwtGrantedAuthoritiesConverter(new CustomGrantedAuthoritiesConverter());
 		return converter;
 	}

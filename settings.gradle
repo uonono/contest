@@ -1,3 +1,4 @@
 rootProject.name = 'contest'
 include 'contest_mgr_eureka'
 include 'contest_mgr_auth'
+include 'contest_mgr_gateway'
