@@ -12,7 +12,11 @@ java {
         languageVersion = JavaLanguageVersion.of(22)
     }
 }
-
+configurations {
+    configureEach {
+//        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
+    }
+}
 repositories {
     mavenCentral()
 }
@@ -22,11 +26,64 @@ ext {
 }
 
 dependencies {
+//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server';
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+
+
+//    implementation 'io.netty:netty-codec-http3:4.1.76.Final' // 支持HTTP/3的Netty依赖
+//    implementation 'io.netty:netty-tcnative-boringssl-static:2.0.46.Final' // Netty BoringSSL静态库，支持HTTP/3和QUIC
+
+//    implementation 'org.springframework.boot:spring-boot-starter-reactor-netty'
+
+
+    //本项目中使用了lombok减少代码量，非必须依赖
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+
+
+
+    // https://mvnrepository.com/artifact/io.netty/netty-codec-http
+//    implementation group: 'io.netty', name: 'netty-codec-http', version: '4.1.111.Final'
+
+    // https://mvnrepository.com/artifact/io.netty/netty-codec
+//    implementation group: 'io.netty', name: 'netty-codec', version: '4.1.112.Final'
+
+
+
+
+
+    // https://mvnrepository.com/artifact/io.netty/netty-common
+//    implementation group: 'io.netty', name: 'netty-common', version: '4.1.111.Final'
+
+    // https://mvnrepository.com/artifact/io.netty.incubator/netty-incubator-codec-http3
+    implementation group: 'io.netty.incubator', name: 'netty-incubator-codec-http3', version: '0.0.28.Final'
+
+
+
+
+//    implementation group: 'io.netty', name: 'netty-handler', version: '4.1.111.Final'
+
+
+
+//    implementation group: 'io.netty', name: 'netty-all', version: '4.1.111.Final'
+
+
+/*
+    // Netty BoringSSL静态库，支持HTTP/3和QUIC
+    implementation 'io.netty:netty-tcnative-boringssl-static:2.0.46.Final'
+
+
+
+
+
+
+    // https://mvnrepository.com/artifact/io.netty/netty-tcnative-boringssl-static
+    implementation group: 'io.netty', name: 'netty-tcnative-boringssl-static', version: '2.0.65.Final'
+*/
 }
 
 dependencyManagement {

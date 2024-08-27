@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -47,12 +49,17 @@ public class TokenController {
 		String scope = authentication.getAuthorities().stream()
 				.map(GrantedAuthority::getAuthority)
 				.collect(Collectors.joining(" "));
+		Set scopes =new HashSet();
+		Set authorities =new HashSet();
+		authorities.add(scope);
+		scopes.add(scope);
 		JwtClaimsSet claims = JwtClaimsSet.builder()
 				.issuer("self")
 				.issuedAt(now)
 				.expiresAt(now.plusSeconds(expiry))
 				.subject(authentication.getName())
-				.claim("scope", scope)
+				.claim("scope", scopes)
+				.claim("authorities", authorities)
 				.build();
 		// @formatter:on
 		return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

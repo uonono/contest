@@ -1,6 +1,9 @@
 server:
   port: 5000
-
+  ssl: #ssl配置
+    key-store: classpath:mykeystore.jks
+    key-store-type: jks
+    key-store-password: changeit
 eureka:
   instance:
     hostname: localhost
@@ -13,22 +16,24 @@ eureka:
 spring:
   cloud:
     gateway:
-      mvc:
-        routes:
-          - id: auth-service
-            uri: http://127.0.0.1:9000
-            predicates:
-              - Path=/auth/**
-            filters:
-              - StripPrefix=1
+      routes:
+        - id: auth-service
+          uri: http://localhost:9000
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
 
-          - id: yh-service
-            uri: http://127.0.0.1:8768
-            predicates:
-              - Path=/yh/**
-            filters:
-              - StripPrefix=1
+        - id: yh-service
+          uri: https://localhost:8768
+          predicates:
+            - Path=/yh/**
+          filters:
+            - StripPrefix=1
 
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
 #spring:
 #  cloud:
 #    gateway:
