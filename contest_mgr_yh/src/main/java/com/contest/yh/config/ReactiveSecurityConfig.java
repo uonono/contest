@@ -4,9 +4,13 @@ package com.contest.yh.config;
 import com.contest.yh.security.CustomReactiveAuthorizationManager;
 import com.contest.yh.security.CustomServerAccessDeniedHandler;
 import com.contest.yh.security.CustomServerAuthenticationEntryPoint;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -15,7 +19,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
 
+import javax.net.ssl.TrustManagerFactory;
+import java.io.InputStream;
+import java.security.KeyStore;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Collectors;
@@ -40,6 +48,31 @@ public class ReactiveSecurityConfig {
 
     @Autowired
     private CustomReactiveAuthorizationManager customReactiveAuthorizationManager;
+
+    /**
+     * 自定义信任库 暂未实验
+     * @return 成功加载信任库的webClient
+     * @throws Exception 还是推荐去搞公网ip帮域名 然后CA证书
+     */
+    @Bean
+    public HttpClient customHttpClient() throws Exception {
+        KeyStore keyStore = KeyStore.getInstance("JKS");
+
+        // 使用 ClassPathResource 来获取 classpath 中的资源
+        Resource resource = new ClassPathResource("cacerts");
+        try (InputStream keyStoreStream = resource.getInputStream()) {
+            keyStore.load(keyStoreStream, "changeit".toCharArray());
+        }
+
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        tmf.init(keyStore);
+
+        SslContext sslContext = SslContextBuilder.forClient()
+                .trustManager(tmf)
+                .build();
+
+        return HttpClient.create().secure(sslContextSpec -> sslContextSpec.sslContext(sslContext));
+    }
 
     /**
      * 注册安全验证规则
@@ -100,7 +133,7 @@ public class ReactiveSecurityConfig {
                 //需要具备相应的角色才能访问
                 .pathMatchers("/user/**").hasAnyRole("admin", "user")
                 //不需要登录就可以访问
-                .pathMatchers("/swagger-ui/**", "/v3/api-docs**").permitAll()
+                .pathMatchers("/**", "/v3/api-docs**").permitAll()
                 //其它路径需要根据指定的方法判断是否有权限访问，基于权限管理模型认证
                 .anyExchange().access(customReactiveAuthorizationManager)
                 )

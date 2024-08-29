@@ -1,8 +1,7 @@
-package com.contest.yh.Controller;
+package com.contest.yh.controller;
 //import org.springframework.security.oauth2.jwt.Jwt;
 //import org.springframework.security.oauth2.jwt.JwtDecoder;
 //import org.springframework.security.oauth2.jwt.JwtDecoders;
-import com.contest.yh.exception.AjaxResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -10,14 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.server.ServerRequest;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
-import java.time.Instant;
-import java.util.List;
 
 @Controller
 public class Demo {

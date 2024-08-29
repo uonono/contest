@@ -1,7 +1,9 @@
-package com.contest.yh.Controller;
+package com.contest.yh.controller;
 
 
 
+import com.contest.yh.domain.ApiMethodInfo;
+import com.contest.yh.domain.OptionalParam;
 import com.contest.yh.exception.AjaxResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -32,6 +34,7 @@ public class UserController {
         return Mono.just(AjaxResponse.success(principal));
     }
 
+    
     //注意权限区分大小写
     @PreAuthorize("hasAuthority('SCOPE_any')")
     @RequestMapping(value = "/user2")
@@ -44,8 +47,9 @@ public class UserController {
     /**
      * 获取用户的claim信息
     */
+    @ApiMethodInfo(description = "获取当前用户的信息")
     @RequestMapping("/userInfo")
-    public Mono<Map<String, Object>> userInfo(Authentication authentication){
+    public Mono<Map<String, Object>> userInfo(@OptionalParam Authentication authentication){
         Map<String,Object> map = new HashMap<>();
         Object principal = authentication.getPrincipal();
         if(principal instanceof Jwt){

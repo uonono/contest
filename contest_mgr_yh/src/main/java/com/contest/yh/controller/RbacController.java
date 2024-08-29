@@ -1,4 +1,4 @@
-package com.contest.yh.Controller;
+package com.contest.yh.controller;
 
 
 
