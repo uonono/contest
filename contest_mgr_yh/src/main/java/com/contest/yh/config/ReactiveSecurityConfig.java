@@ -133,7 +133,7 @@ public class ReactiveSecurityConfig {
                 //需要具备相应的角色才能访问
                 .pathMatchers("/user/**").hasAnyRole("admin", "user")
                 //不需要登录就可以访问
-                .pathMatchers("/**", "/v3/api-docs**").permitAll()
+                .pathMatchers("/swagger-doc/**", "/v3/api-docs**").permitAll()
                 //其它路径需要根据指定的方法判断是否有权限访问，基于权限管理模型认证
                 .anyExchange().access(customReactiveAuthorizationManager)
                 )
