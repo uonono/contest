@@ -4,12 +4,15 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
 import javax.net.ssl.TrustManagerFactory;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.security.KeyStore;
 
 @Configuration
@@ -19,7 +22,8 @@ public class WebClientConfig {
     public WebClient createWebClient() throws Exception {
         // 加载自定义信任库
         KeyStore keyStore = KeyStore.getInstance("JKS");
-        try (FileInputStream keyStoreStream = new FileInputStream("C:\\Users\\PC-00088\\IdeaProjects\\contest\\contest_mgr_gateway\\src\\main\\resources\\mykeystore.jks")) {
+//        try (FileInputStream keyStoreStream = new FileInputStream("C:\\Users\\PC-00088\\IdeaProjects\\contest\\contest_mgr_gateway\\src\\main\\resources\\mykeystore.jks")) {
+        try (InputStream keyStoreStream = new ClassPathResource("mykeystore.jks").getInputStream() ){
             keyStore.load(keyStoreStream, "changeit".toCharArray());
         }
 
