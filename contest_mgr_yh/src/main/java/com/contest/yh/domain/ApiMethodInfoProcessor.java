@@ -23,7 +23,7 @@ public class ApiMethodInfoProcessor {
         this.context = context;
     }
 
-    @PostConstruct
+//    @PostConstruct
     public void processApiMethodInfo() throws NoSuchMethodException {
         String[] beanNames = context.getBeanNamesForAnnotation(RestController.class);
 

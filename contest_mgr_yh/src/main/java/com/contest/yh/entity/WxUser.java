@@ -1,12 +1,11 @@
 package com.contest.yh.entity;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
-
 import java.sql.Timestamp;
-import java.util.Date;
-@Table("wx_user")
 @Data
+@Table("wx_user")  // 对应数据库表名
 public class WxUser {
 
     /**
@@ -123,15 +122,7 @@ public class WxUser {
      * 是否注册会员，0-未注册，1-已注册
      */
     private int bindStatus;
-
-    /**
-     * 注册会员时间
-     */
-    private Date bindTime;
-
-    /**
-     * 所选区域编码
-     */
+    private Timestamp bindTime;
     private String areaCode;
 
     /**
@@ -168,4 +159,6 @@ public class WxUser {
      * 更新时间
      */
     private Timestamp updateTime;
+
+    // Getters and Setters
 }

@@ -48,9 +48,11 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
     implementation 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
 
+    runtimeOnly 'dev.miku:r2dbc-mysql:0.8.2.RELEASE'
 
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webflux-ui
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webflux-ui', version: '2.6.0'
@@ -63,6 +65,7 @@ dependencies {
     //本项目中使用了lombok减少代码量，非必须依赖
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    runtimeOnly 'com.mysql:mysql-connector-j'
 
 }
 tasks.withType(JavaCompile).configureEach {

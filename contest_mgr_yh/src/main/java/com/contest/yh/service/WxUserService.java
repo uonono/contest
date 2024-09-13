@@ -1,6 +1,5 @@
 package com.contest.yh.service;
 
-import com.contest.yh.config.WxUserRepositoryCustom;
 import com.contest.yh.entity.WxUser;
 import com.contest.yh.repository.WxUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +13,9 @@ public class WxUserService {
     @Autowired
     private WxUserRepository wxUserRepository;
 
-    @Autowired
-    private WxUserRepositoryCustom wxUserRepositoryCustom;
-
-
     // 查询所有微信用户
     public Flux<WxUser> findAllUsers() {
-        return wxUserRepositoryCustom.findAll();
+        return wxUserRepository.findAll();
     }
 
     // 根据城市查询微信用户
