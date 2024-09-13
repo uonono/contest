@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import java.sql.Timestamp;
+import java.util.Date;
+
 @Data
 @Table("wx_user")  // 对应数据库表名
 public class WxUser {
