@@ -1,10 +1,8 @@
 package com.contest.yh.entity;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Data
 @Table("wx_user")  // 对应数据库表名
@@ -68,12 +66,12 @@ public class WxUser {
     /**
      * 关注公众号时间
      */
-    private Date subscribedTime;
+    private Timestamp subscribedTime;
 
     /**
      * 取消关注公众号时间
      */
-    private Date unsubscribedTime;
+    private Timestamp unsubscribedTime;
 
     /**
      * 代理商ID，空串表示属于平台
