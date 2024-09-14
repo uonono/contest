@@ -13,10 +13,11 @@ import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
 
-@Component
-public class NettyTcpServer implements CommandLineRunner {
+//@Component
+//public class NettyTcpServer implements CommandLineRunner {
+public class NettyTcpServer  {
 
-    @Override
+//    @Override
     public void run(String... args) throws Exception {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
