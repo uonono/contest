@@ -16,6 +16,17 @@ eureka:
 spring:
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]': # 对所有路径生效
+            allowedOrigins: "*"  # 允许所有域
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            allowedHeaders: "*"  # 允许所有头部
+#            allowCredentials: true  # 允许携带凭证
       routes:
         - id: auth-service
           uri: http://localhost:9000
