@@ -27,4 +27,8 @@ public class WxUserService {
     public Mono<WxUser> findUserById(String wxUserId) {
         return wxUserRepository.findByWxUserId(wxUserId);
     }
+
+    public Flux<Object> findByHisTypeAndHospitalId(String hisType, String hospitalId) {
+        return null;
+    }
 }

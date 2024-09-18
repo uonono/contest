@@ -1,6 +1,7 @@
 package com.contest.yh.controller;
 
 import com.contest.yh.entity.WxUser;
+import com.contest.yh.service.GblSettingWechatService;
 import com.contest.yh.service.WxUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,25 @@ public class WxUserController {
 
     @Autowired
     private WxUserService wxUserService;
+
+    @Autowired
+    private GblSettingWechatService wechatSettingService;
+
+    @GetMapping("/api/GetGblSettingWechat")
+    public Mono<WechatResponse> getGblSettingWechat(
+            @RequestParam String hisType,
+            @RequestParam String hospitalId) {
+
+        return wechatSettingService.findByHisTypeAndHospitalId(hisType, hospitalId)
+                .map(wechatSetting -> {
+                    // 将 WechatSetting 转换为 WechatResponse
+                    WechatResponse response = new WechatResponse();
+//                    response.setHisType(wechatSetting.getHisType());
+//                    response.setHospitalId(wechatSetting.getHospitalId());
+                    // 设置其他字段...
+                    return response;
+                });
+    }
 
     /**
      * 获取所有微信用户

@@ -12,4 +12,5 @@ public interface WxUserRepository extends ReactiveCrudRepository<WxUser, String>
 
     // 按微信用户ID查询
     Mono<WxUser> findByWxUserId(String wxUserId);
+
 }
