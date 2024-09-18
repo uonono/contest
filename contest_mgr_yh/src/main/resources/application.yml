@@ -19,6 +19,15 @@ jwt:
 
 
 spring:
+  data:
+    mongodb:
+      uri: mongodb://bs:bs@l2.ttut.cc:19085/bs
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      timeout: 60s
+      password: Ycs1363707959
+
   application:
     name: oauth2-resource-server-webflux
   r2dbc:
@@ -35,12 +44,7 @@ spring:
           public-key-location: classpath:app.pub
 
           # 认证服务器提供的密钥验证路径，这种方式每次验证access_token都需要访问认证服务器
-  data:
-    redis:
-      host: 127.0.0.1
-      port: 6379
-      timeout: 60s
-      password: Ycs1363707959
+
 #          jwk-set-uri: http://localhost:8080/.well-known/jwks.json
 
 

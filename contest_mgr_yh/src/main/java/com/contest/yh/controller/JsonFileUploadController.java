@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.contest.yh.domain.R;
 import com.contest.yh.entity.GblSettingWechat;
+import com.contest.yh.entity.GblSettingWechatForMongoDB;
 import com.contest.yh.service.GblSettingWechatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,16 +22,17 @@ public class JsonFileUploadController {
     @Autowired
     private GblSettingWechatService gblSettingWechatService;
 
+
     // 通过 JSON 字符串上传并处理数据
     @PostMapping("/json")
     public Mono<R<JSONArray>> uploadJson(@RequestBody String jsonString) {
         // 使用 FastJSON 解析 JSON 字符串为 JSON 对象
         JSONObject jsonObject = JSON.parseObject(jsonString);
-        List<GblSettingWechat> gblSettingWechats = new ArrayList<>();
+        List<GblSettingWechatForMongoDB> gblSettingWechats = new ArrayList<>();
 
         for (Object o : jsonObject.getJSONObject("Returns").getJSONArray("ReturnT")) {
             JSONObject gblSettingWechatSource = JSONObject.parseObject(o.toString());
-            GblSettingWechat gblSettingWechat = new GblSettingWechat();
+            GblSettingWechatForMongoDB gblSettingWechat = new GblSettingWechatForMongoDB();
 
             gblSettingWechat.setU_IsKeyNum(gblSettingWechatSource.getBoolean("u_IsKeyNum"));
             gblSettingWechat.setStrTemp(gblSettingWechatSource.getString("StrTemp"));
@@ -71,7 +73,7 @@ public class JsonFileUploadController {
         }
 
         // 调用服务层根据 JSON 对象插入数据，并返回结果
-        return gblSettingWechatService.saveBatch(gblSettingWechats)
+        return gblSettingWechatService.saveAll(gblSettingWechats)
                 .then(Mono.just(R.success(jsonObject.getJSONObject("Returns").getJSONArray("ReturnT"), "JSON 数据处理成功")))
                 .onErrorResume(e -> Mono.just(R.fail("处理失败: " + e.getMessage())));
 
