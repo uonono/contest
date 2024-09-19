@@ -1,7 +1,7 @@
 package com.contest.yh.controller;
 
-import com.contest.yh.entity.GblSettingWechat;
 import com.contest.yh.entity.WxUser;
+import com.contest.yh.exception.AjaxResponse;
 import com.contest.yh.service.GblSettingWechatService;
 import com.contest.yh.service.WxUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/wxuser")
 public class WxUserController {
 
     @Autowired
@@ -19,20 +18,11 @@ public class WxUserController {
     @Autowired
     private GblSettingWechatService wechatSettingService;
 
-    @GetMapping("/api/GetGblSettingWechat")
-    public Mono<GblSettingWechat> getGblSettingWechat(
-            @RequestParam String hisType,
-            @RequestParam String hospitalId) {
-
-        return wechatSettingService.findByHisTypeAndHospitalId(hisType, hospitalId)
-                .map(wechatSetting -> {
-                    // 将 WechatSetting 转换为 WechatResponse
-                    GblSettingWechat response = new GblSettingWechat();
-//                    response.setHisType(wechatSetting.getHisType());
-//                    response.setHospitalId(wechatSetting.getHospitalId());
-                    // 设置其他字段...
-                    return response;
-                });
+    @PostMapping("/GetGblSettingWechat")
+    public Mono<AjaxResponse> getGblSettingWechat() {
+        return wechatSettingService.findAll() // 获取 Flux 流
+                .collectList() // 将 Flux 转换为 List
+                .map(AjaxResponse::success); // 使用 R.success(data) 包装响应数据
     }
 
     /**
@@ -59,8 +49,8 @@ public class WxUserController {
      * @param id 微信用户ID
      * @return 响应式的用户信息
      */
-    @GetMapping("/{id}")
+    /*@GetMapping("/{id}")
     public Mono<WxUser> getUserById(@PathVariable String id) {
         return wxUserService.findUserById(id);
-    }
+    }*/
 }

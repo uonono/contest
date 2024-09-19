@@ -1,10 +1,14 @@
 package com.contest.yh.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.contest.yh.entity.GblSettingWechat;
 import com.contest.yh.entity.GblSettingWechatForMongoDB;
 import com.contest.yh.repository.GblSettingWechatRepository;
 import com.contest.yh.repository.WechatSettingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,9 +21,27 @@ public class GblSettingWechatService {
     @Autowired
     private WechatSettingRepository wechatSettingRepository;
 
+    @Autowired
+    private ReactiveMongoTemplate mongoTemplate;
+
+    public Flux<GblSettingWechatForMongoDB> findByDynamicQuery(int hisType, int hospitalId) {
+        Query query = new Query();
+
+        // 添加动态查询条件
+        query.addCriteria(Criteria.where("hisType").is(hisType));
+        query.addCriteria(Criteria.where("hospitalId").is(hospitalId));
+
+        /*if (isActive) {
+            query.addCriteria(Criteria.where("IsActive").is(true));
+        }*/
+        // 使用 ReactiveMongoTemplate 进行查询
+        return mongoTemplate.find(query, GblSettingWechatForMongoDB.class);
+    }
+
     // 根据 hisType 和 hospitalId 查询数据
-    public Mono<GblSettingWechat> findByHisTypeAndHospitalId(String hisType, String hospitalId) {
-        return wechatSettingRepository.findByHisTypeAndHospitalId(hisType, hospitalId);
+    public Flux<GblSettingWechatForMongoDB> findByHisTypeAndHospitalId(String HisType, String HospitalId) {
+        // 根据 hisType 和 hospitalId 查询符合条件的数据
+        return gblSettingWechatRepository.findByHisTypeAndHospitalId(HisType, HospitalId);
     }
 
     public Mono<Void> saveBatch(List<GblSettingWechat> gblSettingWechats) {
@@ -32,5 +54,9 @@ public class GblSettingWechatService {
 
     public Flux<GblSettingWechatForMongoDB> saveAll(List<GblSettingWechatForMongoDB> gblSettingWechats) {
         return gblSettingWechatRepository.saveAll(gblSettingWechats);
+    }
+
+    public Flux<GblSettingWechatForMongoDB> findAll() {
+        return gblSettingWechatRepository.findAll();
     }
 }

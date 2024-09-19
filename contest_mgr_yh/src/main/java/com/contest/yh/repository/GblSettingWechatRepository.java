@@ -10,4 +10,5 @@ import java.util.List;
 public interface GblSettingWechatRepository extends ReactiveMongoRepository<GblSettingWechatForMongoDB, String> {
     Flux<GblSettingWechat> saveAll(List<GblSettingWechat> gblSettingWechats);
 
+    Flux<GblSettingWechatForMongoDB> findByHisTypeAndHospitalId(String HisType, String HospitalId);
 }

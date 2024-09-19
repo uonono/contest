@@ -31,7 +31,7 @@ public class CustomResponseGlobalFilter implements GlobalFilter, Ordered {
             headers.set("Vary", "Origin, Access-Control-Request-Method, Access-Control-Request-Headers");
 
             // 确保 Access-Control-Allow-Origin 只有一个值
-            headers.set("Access-Control-Allow-Origin", "http://192.168.0.102:8080");
+            headers.set("Access-Control-Allow-Origin", "*");
 
             // 移除不需要的响应头
             headers.remove("X-Frame-Options");

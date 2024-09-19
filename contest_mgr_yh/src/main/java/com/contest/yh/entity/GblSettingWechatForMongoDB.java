@@ -2,6 +2,8 @@ package com.contest.yh.entity;
 
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
 @Data
 @Document(collection = "gbl_setting_wechat") // 指定 MongoDB 中的集合名称
 public class GblSettingWechatForMongoDB {
