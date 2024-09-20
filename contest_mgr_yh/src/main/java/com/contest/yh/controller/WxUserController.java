@@ -1,5 +1,6 @@
 package com.contest.yh.controller;
 
+import com.contest.yh.entity.GblSettingWechatForMongoDB;
 import com.contest.yh.entity.WxUser;
 import com.contest.yh.exception.AjaxResponse;
 import com.contest.yh.service.GblSettingWechatService;
@@ -18,11 +19,16 @@ public class WxUserController {
     @Autowired
     private GblSettingWechatService wechatSettingService;
 
-    @PostMapping("/GetGblSettingWechat")
+    /*@PostMapping("/GetGblSettingWechat")
     public Mono<AjaxResponse> getGblSettingWechat() {
         return wechatSettingService.findAll() // 获取 Flux 流
                 .collectList() // 将 Flux 转换为 List
                 .map(AjaxResponse::success); // 使用 R.success(data) 包装响应数据
+    }*/
+
+    @PostMapping("/GetGblSettingWechat")
+    public Mono<GblSettingWechatForMongoDB> getGblSettingWechat() {
+        return Mono.from(wechatSettingService.findAll()); // 使用 R.success(data) 包装响应数据
     }
 
     /**

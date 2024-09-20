@@ -38,11 +38,6 @@ public class GblSettingWechatService {
         return mongoTemplate.find(query, GblSettingWechatForMongoDB.class);
     }
 
-    // 根据 hisType 和 hospitalId 查询数据
-    public Flux<GblSettingWechatForMongoDB> findByHisTypeAndHospitalId(String HisType, String HospitalId) {
-        // 根据 hisType 和 hospitalId 查询符合条件的数据
-        return gblSettingWechatRepository.findByHisTypeAndHospitalId(HisType, HospitalId);
-    }
 
     public Mono<Void> saveBatch(List<GblSettingWechat> gblSettingWechats) {
         return wechatSettingRepository.saveAll(gblSettingWechats)
@@ -52,9 +47,9 @@ public class GblSettingWechatService {
     @Autowired
     private GblSettingWechatRepository gblSettingWechatRepository;
 
-    public Flux<GblSettingWechatForMongoDB> saveAll(List<GblSettingWechatForMongoDB> gblSettingWechats) {
-        return gblSettingWechatRepository.saveAll(gblSettingWechats);
-    }
+//    public Flux<GblSettingWechatForMongoDB> saveAll(List<GblSettingWechatForMongoDB> gblSettingWechats) {
+//        return gblSettingWechatRepository.saveAll(gblSettingWechats);
+//    }
 
     public Flux<GblSettingWechatForMongoDB> findAll() {
         return gblSettingWechatRepository.findAll();

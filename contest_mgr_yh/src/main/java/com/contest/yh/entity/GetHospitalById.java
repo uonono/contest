@@ -2,7 +2,6 @@
   * Copyright 2024 bejson.com 
   */
 package com.contest.yh.entity;
-import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
-@Data
+//@Data
 @Document("GetHospitalById")
 public class GetHospitalById {
 
@@ -38,7 +37,7 @@ public class GetHospitalById {
     public List<String> ShowObjectList;
     public List<String> ShowMessages;
 
-    @Data
+//    @Data
     public class Returns {
 
         public String BankAcctType;

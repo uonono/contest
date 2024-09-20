@@ -28,11 +28,11 @@ public class JsonFileUploadController {
     public Mono<R<JSONArray>> uploadJson(@RequestBody String jsonString) {
         // 使用 FastJSON 解析 JSON 字符串为 JSON 对象
         JSONObject jsonObject = JSON.parseObject(jsonString);
-        List<GblSettingWechatForMongoDB> gblSettingWechats = new ArrayList<>();
+        List<GblSettingWechat> gblSettingWechats = new ArrayList<>();
 
         for (Object o : jsonObject.getJSONObject("Returns").getJSONArray("ReturnT")) {
             JSONObject gblSettingWechatSource = JSONObject.parseObject(o.toString());
-            GblSettingWechatForMongoDB gblSettingWechat = new GblSettingWechatForMongoDB();
+            GblSettingWechat gblSettingWechat = new GblSettingWechat();
 
             gblSettingWechat.setU_IsKeyNum(gblSettingWechatSource.getBoolean("u_IsKeyNum"));
             gblSettingWechat.setStrTemp(gblSettingWechatSource.getString("StrTemp"));
@@ -73,7 +73,7 @@ public class JsonFileUploadController {
         }
 
         // 调用服务层根据 JSON 对象插入数据，并返回结果
-        return gblSettingWechatService.saveAll(gblSettingWechats)
+        return gblSettingWechatService.findAll()
                 .then(Mono.just(R.success(jsonObject.getJSONObject("Returns").getJSONArray("ReturnT"), "JSON 数据处理成功")))
                 .onErrorResume(e -> Mono.just(R.fail("处理失败: " + e.getMessage())));
 
