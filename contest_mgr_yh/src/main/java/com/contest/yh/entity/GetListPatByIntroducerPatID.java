@@ -2,20 +2,12 @@
   * Copyright 2024 bejson.com 
   */
 package com.contest.yh.entity;
-import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-/**
- * Auto-generated: 2024-09-19 18:21:58
- *
- * @author bejson.com (i@bejson.com)
- * @website http://www.bejson.com/java2pojo/
- */
-//@Data
-@Document("GetByKeyNumSetValue")
-public class GetByKeyNumSetValue {
+@Document("GetListPatByIntroducerPatID")
+public class GetListPatByIntroducerPatID  {
 
     public String _saveStatus;
     public List<String> _showMessages;
@@ -27,7 +19,7 @@ public class GetByKeyNumSetValue {
     public int ErrorCode;
     public boolean IsNewInfo;
     public boolean u_IsErrorCode;
-    public String Returns;
+    public List<String> Returns;
     public String GUID;
     public String RequestID;
     public boolean IsSuccess;

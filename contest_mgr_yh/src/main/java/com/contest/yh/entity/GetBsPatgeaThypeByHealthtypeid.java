@@ -2,20 +2,18 @@
   * Copyright 2024 bejson.com 
   */
 package com.contest.yh.entity;
-import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
 /**
- * Auto-generated: 2024-09-19 18:21:58
+ * Auto-generated: 2024-09-24 16:12:43
  *
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
-//@Data
-@Document("GetByKeyNumSetValue")
-public class GetByKeyNumSetValue {
+@Document("GetBsPatgeaThypeByHealthtypeid")
+public class GetBsPatgeaThypeByHealthtypeid {
 
     public String _saveStatus;
     public List<String> _showMessages;
@@ -27,7 +25,11 @@ public class GetByKeyNumSetValue {
     public int ErrorCode;
     public boolean IsNewInfo;
     public boolean u_IsErrorCode;
-    public String Returns;
+    public Returns Returns;
+    public class Returns {
+        public String AbnormalIndexStr;
+        public List<String> LstBsPatHeathType;
+    }
     public String GUID;
     public String RequestID;
     public boolean IsSuccess;

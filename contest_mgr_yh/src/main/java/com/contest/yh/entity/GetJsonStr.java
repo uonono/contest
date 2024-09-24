@@ -13,29 +13,29 @@ import java.util.List;
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
-@Data
+//@Data
 @Document("GetJsonStr")
 public class GetJsonStr {
 
-    private String _saveStatus;
-    private List<String> _showMessages;
-    private List<String> _showObjectList;
-    private boolean _isShowMsgNull;
-    private int WarningCode;
-    private String ErrorMsg;
-    private String WarningMsg;
-    private int ErrorCode;
-    private boolean IsNewInfo;
-    private boolean u_IsErrorCode;
-    private String Returns;
-    private String GUID;
-    private String RequestID;
-    private boolean IsSuccess;
-    private int State;
-    private String Message;
-    private String ShowMsg;
-    private boolean u_IsShowMsgNull;
-    private List<String> ShowObjectList;
-    private List<String> ShowMessages;
+    public String _saveStatus;
+    public List<String> _showMessages;
+    public List<String> _showObjectList;
+    public boolean _isShowMsgNull;
+    public int WarningCode;
+    public String ErrorMsg;
+    public String WarningMsg;
+    public int ErrorCode;
+    public boolean IsNewInfo;
+    public boolean u_IsErrorCode;
+    public String Returns;
+    public String GUID;
+    public String RequestID;
+    public boolean IsSuccess;
+    public int State;
+    public String Message;
+    public String ShowMsg;
+    public boolean u_IsShowMsgNull;
+    public List<String> ShowObjectList;
+    public List<String> ShowMessages;
 
 }

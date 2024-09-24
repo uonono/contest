@@ -16,8 +16,8 @@ public class GetPictureByImageTypeController {
 
     // 获取所有文档
     @PostMapping("/GetPictureByImageType")
-    public Flux<GetPictureByImageType> getAllDocuments() {
-        return service.getAllDocuments();
+    public Mono<GetPictureByImageType> getAllDocuments() {
+        return Mono.from(service.getAllDocuments());
     }
 
 }

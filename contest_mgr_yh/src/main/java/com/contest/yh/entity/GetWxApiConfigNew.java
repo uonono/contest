@@ -2,20 +2,18 @@
   * Copyright 2024 bejson.com 
   */
 package com.contest.yh.entity;
-import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
 /**
- * Auto-generated: 2024-09-19 18:21:58
+ * Auto-generated: 2024-09-24 16:39:6
  *
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
-//@Data
-@Document("GetByKeyNumSetValue")
-public class GetByKeyNumSetValue {
+@Document("GetWxApiConfigNew")
+public class GetWxApiConfigNew {
 
     public String _saveStatus;
     public List<String> _showMessages;
