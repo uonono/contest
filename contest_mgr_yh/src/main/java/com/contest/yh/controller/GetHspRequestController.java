@@ -82,6 +82,14 @@ public class GetHspRequestController {
         return Mono.from(insertSlOrderService.findAll());
     }
 
+    @Autowired
+    private GetBestSellersPagingService getBestSellersPagingService;
+
+    @PostMapping("/GetBestSellersPaging")
+    public Mono<GetBestSellersPaging> GetBestSellersPaging() {
+        // 返回 GetByKeyNumSetValue 集合的所有数据
+        return Mono.from(getBestSellersPagingService.findAll());
+    }
     // 根据 WarningCode 获取单个文档
     /*@GetMapping("/warningCode/{code}")
     public Mono<GetPhoneInstitution> getDocumentByWarningCode(@PathVariable("code") int warningCode) {
