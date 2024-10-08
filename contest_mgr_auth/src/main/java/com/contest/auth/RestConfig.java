@@ -17,29 +17,28 @@
 package com.contest.auth;
 
 import com.contest.auth.config.CustomGrantedAuthoritiesConverter;
+import com.contest.auth.config.CustomReactiveGrantedAuthoritiesConverter;
+import com.contest.auth.config.CustomReactiveUserDetailsService;
 import com.nimbusds.jose.jwk.*;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
+import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.userdetails.*;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
-import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
-import org.springframework.security.provisioning.UserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import reactor.core.publisher.Mono;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -58,7 +57,7 @@ public class RestConfig {
 	@Value("${jwt.private.key}")
 	RSAPrivateKey priv;
 
-	@Bean
+	/*@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		// @formatter:off
 		http
@@ -75,24 +74,53 @@ public class RestConfig {
 				);
 		// @formatter:on
 		return http.build();
+	}*/
+
+	// 注入 CustomAuthenticationManager
+
+	@Bean
+	public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) throws Exception {
+		// @formatter:off
+		http
+				.authorizeExchange(exchanges -> exchanges
+						.anyExchange().authenticated()
+				)
+				.csrf(ServerHttpSecurity.CsrfSpec::disable)  // 禁用 CSRF 保护
+				.httpBasic(Customizer.withDefaults())
+				.oauth2ResourceServer(oauth2 -> oauth2
+						.jwt(jwt -> jwt.jwtAuthenticationConverter(customReactiveJwtAuthenticationConverter())) // 使用自定义的转换器
+				)
+				.exceptionHandling(exceptions -> exceptions
+						.authenticationEntryPoint((exchange, e) -> Mono.fromRunnable(() -> {
+							exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED); // 自定义认证入口点
+						}))
+						.accessDeniedHandler((exchange, e) -> Mono.fromRunnable(() -> {
+							exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN); // 自定义访问拒绝处理器
+						}))
+				);
+		// @formatter:on
+		return http.build();
+	}
+
+
+	@Bean
+	public ReactiveJwtAuthenticationConverter customReactiveJwtAuthenticationConverter() {
+		ReactiveJwtAuthenticationConverter converter = new ReactiveJwtAuthenticationConverter();
+		converter.setJwtGrantedAuthoritiesConverter(new CustomReactiveGrantedAuthoritiesConverter());
+		return converter;
 	}
 
 	@Bean
-	public UserDetailsService userDetailsService() {
-		//region 从这里进行选择对应的UserDetailsManager 而自定义的可以进行诸如redis之类的存储  默认的它有四种1
-		//1.内存，不知道原来的这个bean用的什么，2.jdbc3.等等
-		UserDetailsManager userDetailsService = new CustomUserDetailsService();
-		//endregion 从这里进行选择对应的UserDetailsManager 而自定义的可以进行诸如redis之类的存储  默认的它有四种1
-		if (!userDetailsService.userExists("user")) {
-			UserDetails user = User.withUsername("user")
-					.password("{noop}password")
-					.authorities("app")
-					.build();
-			userDetailsService.createUser(user);
-		}
-		return userDetailsService;
+	public ReactiveUserDetailsService reactiveUserDetailsService() {
+		// 在这里可以配置从数据库或其他地方获取用户信息
+		return username -> {
+			// 可以根据用户名查询用户并返回
+			return Mono.just(User.withUsername("user")
+					.password("{noop}password") // 这里直接使用明文密码，实际中需要使用加密
+					.roles("USER")
+					.build());
+		};
 	}
-
 /*	@Bean
 	UserDetailsService users() {
 		// @formatter:off
@@ -105,9 +133,14 @@ public class RestConfig {
 		// @formatter:on
 	}*/
 
-	@Bean
+	/*@Bean
 	JwtDecoder jwtDecoder() {
 		return NimbusJwtDecoder.withPublicKey(this.key).build();
+	}*/
+
+	@Bean
+	public ReactiveJwtDecoder jwtDecoder() {
+		return NimbusReactiveJwtDecoder.withPublicKey(this.key).build();
 	}
 
 	@Bean
@@ -117,16 +150,44 @@ public class RestConfig {
 		return new NimbusJwtEncoder(jwks);
 	}
 
-	/** 
+	/**
 	* @Author: cy
 	* @Date: 2024/8/2 上午10:41
 	* @Description: 配置JwtAuthenticationConverter使用自定义的GrantedAuthoritiesConverter
 	*/
-	@Bean
+	/*@Bean
 	public JwtAuthenticationConverter customJwtAuthenticationConverter() {
 		JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
 		//原来那个自定义就是JwtAuthenticationConverter里面的方法 用Converter<Jwt, AbstractAuthenticationToken>反而没有，这样的话，不知道它到底在final个什么劲
 		converter.setJwtGrantedAuthoritiesConverter(new CustomGrantedAuthoritiesConverter());
 		return converter;
+	}*/
+
+	@Autowired
+	private CustomReactiveUserDetailsService customReactiveUserDetailsService;
+
+	// 配置使用 ReactiveUserDetailsService 的 AuthenticationManager
+	@Bean
+	public ReactiveAuthenticationManager authenticationManager() {
+		// 使用 UserDetailsRepositoryReactiveAuthenticationManager 作为认证管理器
+		UserDetailsRepositoryReactiveAuthenticationManager authManager =
+				new UserDetailsRepositoryReactiveAuthenticationManager(customReactiveUserDetailsService);
+
+		// 你可以配置密码加密器（如果需要）
+		// authManager.setPasswordEncoder(passwordEncoder());
+
+		return authManager;
+	}
+
+	@Bean
+	public ReactiveJwtAuthenticationConverterAdapter customJwtAuthenticationConverter() {
+		// 创建 JwtAuthenticationConverter 对象
+		JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+
+		// 使用自定义的 JwtGrantedAuthoritiesConverter
+		jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new CustomGrantedAuthoritiesConverter());
+
+		// 将 JwtAuthenticationConverter 包装为响应式的 ReactiveJwtAuthenticationConverterAdapter
+		return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
 	}
 }

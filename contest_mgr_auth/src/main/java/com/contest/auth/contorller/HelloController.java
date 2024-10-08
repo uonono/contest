@@ -19,6 +19,7 @@ package com.contest.auth.contorller;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 /**
  * A controller for the hello resource.
@@ -29,8 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
 
 	@GetMapping("/")
-	public String hello(Authentication authentication) {
-		return "Hello, " + authentication.getName() + "!";
+	public Mono<String> hello(Authentication authentication) {
+		return Mono.just("Hello, " + authentication.getName() + "!");
 	}
 
 }
