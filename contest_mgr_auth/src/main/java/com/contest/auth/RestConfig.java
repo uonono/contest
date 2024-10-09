@@ -16,6 +16,7 @@
 
 package com.contest.auth;
 
+import com.contest.auth.config.BasicAuthBlockFilter;
 import com.contest.auth.config.CustomGrantedAuthoritiesConverter;
 import com.contest.auth.config.CustomReactiveGrantedAuthoritiesConverter;
 import com.contest.auth.config.CustomReactiveUserDetailsService;
@@ -31,6 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.oauth2.jwt.*;
@@ -89,7 +91,7 @@ public class RestConfig {
 				.httpBasic(Customizer.withDefaults())
 				.oauth2ResourceServer(oauth2 -> oauth2
 						.jwt(jwt -> jwt.jwtAuthenticationConverter(customReactiveJwtAuthenticationConverter())) // 使用自定义的转换器
-				)
+				).addFilterBefore(new BasicAuthBlockFilter(), SecurityWebFiltersOrder.AUTHENTICATION) // 添加自定义的过滤器，阻止 Basic 认证
 				.exceptionHandling(exceptions -> exceptions
 						.authenticationEntryPoint((exchange, e) -> Mono.fromRunnable(() -> {
 							exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED); // 自定义认证入口点

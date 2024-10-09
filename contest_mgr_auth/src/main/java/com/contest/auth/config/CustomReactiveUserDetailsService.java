@@ -13,7 +13,6 @@ public class CustomReactiveUserDetailsService implements ReactiveUserDetailsServ
     public Mono<UserDetails> findByUsername(String username) {
         // 可以根据用户名返回一个动态生成的用户
         System.out.println(username + " 这个是用户输入的 username");
-
         // 模拟根据用户名创建用户（例如自动注册用户）
         UserDetails user = User.withUsername(username)
                 .password("{noop}" + username) // 密码这里简单处理，使用用户名作为密码

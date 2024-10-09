@@ -1,5 +1,9 @@
 server:
   port: 9000
+  ssl: #ssl配置
+    key-store: classpath:mykeystore.jks
+    key-store-type: jks
+    key-store-password: changeit
 spring:
   security:
     user:
