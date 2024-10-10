@@ -18,7 +18,7 @@ public class CustomReactiveGrantedAuthoritiesConverter implements Converter<Jwt,
     @Override
     public Flux<GrantedAuthority> convert(Jwt jwt) {
         // 假设从 JWT 的 claims 中提取 "roles"
-        Collection<String> roles = (Collection<String>) jwt.getClaim("roles");
+        Collection<String> roles = jwt.getClaim("roles");
 
         if (isTokenBlacklisted(jwt)) {
             throw new JwtException("Token is blacklisted");

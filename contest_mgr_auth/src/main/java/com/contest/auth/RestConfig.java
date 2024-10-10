@@ -24,10 +24,14 @@ import com.nimbusds.jose.jwk.*;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
@@ -41,7 +45,11 @@ import org.springframework.security.oauth2.server.resource.authentication.Reacti
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
 
+import javax.net.ssl.TrustManagerFactory;
+import java.io.InputStream;
+import java.security.KeyStore;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
@@ -58,6 +66,30 @@ public class RestConfig {
 
 	@Value("${jwt.private.key}")
 	RSAPrivateKey priv;
+
+	/**
+	 * 自定义信任库 暂未实验
+	 * @return 成功加载信任库的webClient
+	 * @throws Exception 还是推荐去搞公网ip帮域名 然后CA证书
+	 */
+	@Bean
+	public HttpClient customHttpClient() throws Exception {
+		KeyStore keyStore = KeyStore.getInstance("JKS");
+
+		Resource resource = new ClassPathResource("cacerts");
+		try (InputStream keyStoreStream = resource.getInputStream()) {
+			keyStore.load(keyStoreStream, "changeit".toCharArray());
+		}
+
+		TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+		tmf.init(keyStore);
+
+		SslContext sslContext = SslContextBuilder.forClient()
+				.trustManager(tmf)
+				.build();
+
+		return HttpClient.create().secure(sslContextSpec -> sslContextSpec.sslContext(sslContext));
+	}
 
 	/*@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

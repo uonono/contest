@@ -29,7 +29,7 @@ spring:
 #            allowCredentials: true  # 允许携带凭证
       routes:
         - id: auth-service
-          uri: http://localhost:9000
+          uri: https://localhost:9000
           predicates:
             - Path=/auth/**
           filters:
