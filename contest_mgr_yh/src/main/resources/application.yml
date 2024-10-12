@@ -21,7 +21,7 @@ jwt:
 spring:
   data:
     mongodb:
-      uri: mongodb://bs:bs@l2.ttut.cc:48906/bs
+      uri: mongodb://bs:bs@free.svipss.top:28454/bs
     redis:
       host: 127.0.0.1
       port: 6379
@@ -48,4 +48,8 @@ spring:
 #          jwk-set-uri: http://localhost:8080/.well-known/jwks.json
 
 
-
+# 小程序相关配置
+xcx:
+  account:
+    appId: wx360c292b9813f56e
+    appSecret: 388ccf427c4797b26e6e5f4919613cf5
