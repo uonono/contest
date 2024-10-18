@@ -11,10 +11,10 @@ import reactor.netty.http.server.HttpServer;
 * @Date: 2024/10/10 09:25
 * @Description: 这个是http的配置，当启用了这个配置时，https会失效
 */
-@Configuration
+//@Configuration
 public class ServerConfig {
 
-    @Bean
+//    @Bean
     public WebServerFactoryCustomizer<NettyReactiveWebServerFactory> nettyServerCustomizer() {
         return factory -> factory.addServerCustomizers(httpServer -> 
             HttpServer.create()

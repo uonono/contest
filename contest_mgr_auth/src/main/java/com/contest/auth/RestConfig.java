@@ -76,7 +76,7 @@ public class RestConfig {
 	public HttpClient customHttpClient() throws Exception {
 		KeyStore keyStore = KeyStore.getInstance("JKS");
 
-		Resource resource = new ClassPathResource("cacerts");
+		Resource resource = new ClassPathResource("mykeystore.jks");
 		try (InputStream keyStoreStream = resource.getInputStream()) {
 			keyStore.load(keyStoreStream, "changeit".toCharArray());
 		}

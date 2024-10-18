@@ -23,7 +23,7 @@ public class WebClientConfig {
         // 加载自定义信任库
         KeyStore keyStore = KeyStore.getInstance("JKS");
 //        try (FileInputStream keyStoreStream = new FileInputStream("C:\\Users\\PC-00088\\IdeaProjects\\contest\\contest_mgr_gateway\\src\\main\\resources\\mykeystore.jks")) {
-        try (InputStream keyStoreStream = new ClassPathResource("mykeystore.jks").getInputStream() ){
+        try (InputStream keyStoreStream = new ClassPathResource("cacerts").getInputStream() ){
             keyStore.load(keyStoreStream, "changeit".toCharArray());
         }
 

@@ -21,7 +21,7 @@ jwt:
 spring:
   data:
     mongodb:
-      uri: mongodb://bs:bs@free.svipss.top:28454/bs
+      uri: mongodb://bs:bs@free.svipss.top:36155/bs
     redis:
       host: 127.0.0.1
       port: 6379

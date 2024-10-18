@@ -59,7 +59,7 @@ public class ReactiveSecurityConfig {
     public HttpClient customHttpClient() throws Exception {
         KeyStore keyStore = KeyStore.getInstance("JKS");
 
-        Resource resource = new ClassPathResource("cacerts");
+        Resource resource = new ClassPathResource("mykeystore.jks");
         try (InputStream keyStoreStream = resource.getInputStream()) {
             keyStore.load(keyStoreStream, "changeit".toCharArray());
         }
@@ -80,7 +80,7 @@ public class ReactiveSecurityConfig {
             .authorizeExchange(exchanges -> exchanges
                 .pathMatchers("/res/**", "/userInfo/**").authenticated() // 需要认证
                 .pathMatchers("/user/**").hasAnyRole("admin", "user")   // 特定角色访问
-                .pathMatchers("/swagger-doc/**", "/v3/api-docs/**").permitAll() // 公开的API文档
+                .pathMatchers("/swagger-doc/**", "/v3/api-docs/**","/AuthorizedLoginLatest").permitAll() // 公开的API文档和登录接口
                 .anyExchange().access(customReactiveAuthorizationManager)) // 自定义认证管理
             .csrf(ServerHttpSecurity.CsrfSpec::disable) // 关闭CSRF
             .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable) // 禁用HTTP Basic认证

@@ -12,7 +12,7 @@ import reactor.netty.http.client.HttpClient;
 //@Configuration
 public class WebClientConfig {
 
-//    @Bean
+    /*@Bean
     public WebClient createWebClient() throws Exception {
         // 使用InsecureTrustManagerFactory禁用证书验证
         SslContext sslContext = SslContextBuilder.forClient()
@@ -25,5 +25,5 @@ public class WebClientConfig {
         return WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
-    }
+    }*/
 }
