@@ -3,7 +3,6 @@ package com.contest.yh.controller;
 import com.contest.yh.exception.AjaxResponse;
 import com.contest.yh.exception.CustomException;
 import com.contest.yh.exception.CustomExceptionType;
-import com.contest.yh.model.AuthorizedLoginResponse;
 import com.contest.yh.service.AuthorizedLoginLatestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,13 +18,26 @@ public class AuthorizedLoginLatestController {
     @Autowired
     private AuthorizedLoginLatestService authorizedLoginLatestService;
 
+    /**
+     * 开放的登录接口
+     * @param requestBody 接收的code授权码
+     * @return 用户的个人信息
+     */
     @PostMapping("/AuthorizedLoginLatest")
-    public Mono<AjaxResponse> handleLogin(@RequestBody Map<String, String> requestBody) {
+    public Mono<AjaxResponse> handleLogin(@RequestBody(required = false) Map<String, String> requestBody) {
+
+        if (requestBody == null || !requestBody.containsKey("code")) {
+            return Mono.just(AjaxResponse.error(new CustomException(CustomExceptionType.REQUEST_PARAMETER_ERROR, "Request body is empty or missing code")));
+        }
         // 获取 code 参数
         String code = requestBody.get("code");
 
+        // 验证 code
+        if (code == null || code.matches("^[a-zA-Z]+$") || code.matches("^[0-9]+$")) {
+            return Mono.just(AjaxResponse.error(new CustomException(CustomExceptionType.REQUEST_PARAMETER_ERROR, "Invalid code format")));
+        }
+
         // 调用 fetchToken 方法并返回 AuthorizedLoginResponse
-        // 如果成功，返回封装好的 AjaxResponse
         return authorizedLoginLatestService.fetchToken(code)
                 .map(AjaxResponse::success)
                 .onErrorResume(e -> {
@@ -34,5 +46,8 @@ public class AuthorizedLoginLatestController {
                     return Mono.just(AjaxResponse.error(customException));
                 });
     }
+
+
+
 
 }

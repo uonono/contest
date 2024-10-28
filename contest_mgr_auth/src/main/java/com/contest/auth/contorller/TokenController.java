@@ -59,7 +59,7 @@ public class TokenController {
                 System.out.println("Existing JWT Token: " + jwt.getTokenValue());
                 sink.next(jwt.getTokenValue()); // 直接返回现有的 JWT token
             } else if (auth instanceof UsernamePasswordAuthenticationToken) {
-                // 如果是 Basic 认证，则生成新的 JWT token
+                // 如果是 Basic 认证，则生成新的 JWT token  TODO basic认证也不是生成新的jwt，当账号密码相同时，也是返回原来的（如果没过期）
                 System.out.println("Basic Authentication detected.");
                 // 获取权限
                 String scope = auth.getAuthorities().stream()
